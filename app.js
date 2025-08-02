@@ -15,6 +15,11 @@ let userSession = null; // Add proper session management
 // Initialisation
 document.addEventListener('DOMContentLoaded', function() {
     audioPlayer = document.getElementById('audioPlayer');
+    
+    if (!audioPlayer) {
+        console.warn('Audio player element with ID "audioPlayer" not found in the DOM.');
+    }
+    
     setupAudioPlayer();
     setupUploadArea();
     setupSearch();
@@ -23,6 +28,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Configuration du lecteur audio
 function setupAudioPlayer() {
+    if (!audioPlayer) {
+        console.warn('Audio player element not found. Audio functionality will be disabled.');
+        return;
+    }
+
     audioPlayer.addEventListener('loadedmetadata', function() {
         console.log('Audio loaded:', currentTrack?.title);
     });
@@ -280,6 +290,11 @@ async function playMusic(musicId) {
         return;
     }
 
+    if (!audioPlayer) {
+        showNotification('Lecteur audio non disponible', 'error');
+        return;
+    }
+
     try {
         currentTrack = music;
         // Fix potential double path issue
@@ -352,6 +367,11 @@ function updateNowPlaying() {
 async function togglePlayPause() {
     if (!currentTrack) {
         showNotification('Sélectionnez d\'abord une musique !', 'error');
+        return;
+    }
+    
+    if (!audioPlayer) {
+        showNotification('Lecteur audio non disponible', 'error');
         return;
     }
     
